@@ -1,9 +1,14 @@
 import numpy as np
 import cv2
-import time
+
 
 def set_ROI(frame, vertices):
-
+    """
+    Set the region of interest in the given frame designated as set of vertices.
+    :param frame: a frame to set ROI on
+    :param vertices: Vertex points of ROI
+    :return: Masked frame
+    """
     # Create a mask of the size of input img
     mask = np.zeros_like(frame)
 
@@ -37,6 +42,14 @@ def draw_lanes(frame, lines, color=[0, 255, 255], thickness=3):
 """
 
 def process_frame(frame):
+    """
+    Processes the given frame using a set of elementary processing algorithms
+    - RGB to Grayscale
+    - Edge detection
+    - Gaussian blur
+    :param frame: a frame to do processing on
+    :return: processed frame
+    """
     original_frame = frame
 
     # convert to gray
@@ -58,5 +71,11 @@ def process_frame(frame):
 
 
 def process_default(frame):
+    """
+    Default method for frame processing
+    Do nothing
+    :param frame: a frame to do processing on
+    :return: same as input frame
+    """
     original_frame = frame
     return original_frame

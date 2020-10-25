@@ -13,13 +13,11 @@ class FrameCapture:
     Takes target resolution, index of target monitor as input to generate an
     instance of FrameCapture class
 
-    :arg
-        resolution (tuple): Resolution of captured frame expressed in (Width, Height)
-        is_multi_monitor (bool): Whether the system has two or more monitors
-        target_monitor_idx (int): Index of monitor that game screen will be displayed
+    :param resolution: Resolution of captured frame expressed in (Width, Height)
+    :param is_multi_monitor: Whether the system has two or more monitors
+    :param target_monitor_idx: Index of monitor that game screen will be displayed
 
-    :returns
-        an instance of FrameCapture class
+    :return an instance of FrameCapture class
     """
     def __init__(self, resolution=(800, 600), is_multi_monitor=False,
                   target_monitor_idx=1):
@@ -44,11 +42,9 @@ class FrameCapture:
         """
         Captures a single frame
 
-        :arg
-            processing_method (function): Type of frame processing defined in ImageProcess.py
+        :param processing_method: Type of frame processing defined in ImageProcess.py
 
-        :returns
-            frame(numpy array): Numpy array holding pixel data of captured frame
+        :return frame: Numpy array holding pixel data of captured frame
         """
 
         # Initialize timer to capture the interval between each process

@@ -3,8 +3,11 @@ import numpy as np
 
 
 class YOLO_net():
+    """
+    YOLO_net class for object detection
 
-    # Constructor & Initialize network with parameters
+    TODO: Replace this network with Tensorflow based YOLOv4 algorithm
+    """
     def __init__(self):
         self.Net = cv2.dnn.readNet("YOLOV3/yolov3-tiny.weights", "YOLOV3/yolov3-tiny.cfg")
 
