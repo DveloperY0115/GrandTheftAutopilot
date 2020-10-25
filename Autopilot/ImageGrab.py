@@ -1,50 +1,67 @@
 import numpy as np
 import cv2
-import glob
 import mss
 import mss.tools
-from PIL import Image
 import time
+import ImageProcess
 
-def process_frame(frame):
-    original_frame = frame
 
-    # convert to gray
-    processed_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-    # edge detection
-    processed_frame = cv2.Canny(processed_frame, threshold1=200, threshold2=300)
+class FrameCapture:
+    """
+    FrameCapture class for capturing and doing elementary processing on game screen
 
-    return processed_frame
+    Takes target resolution, index of target monitor as input to generate an
+    instance of FrameCapture class
 
-def record_screen(resolution = (800, 600), is_multi_monitor = False, target_monitor_idx = 1,):
-    # Record resolution : 800 x 600
-    capturer = mss.mss()
-    monitor_number = target_monitor_idx
+    :arg
+        resolution (tuple): Resolution of captured frame expressed in (Width, Height)
+        is_multi_monitor (bool): Whether the system has two or more monitors
+        target_monitor_idx (int): Index of monitor that game screen will be displayed
 
-    mon = capturer.monitors[monitor_number]
-    # Using multiple monitors
-    if is_multi_monitor:
-        mon = capturer.monitors[monitor_number]
+    :returns
+        an instance of FrameCapture class
+    """
+    def __init__(self, resolution=(800, 600), is_multi_monitor=False,
+                  target_monitor_idx=1):
+        self.capturer = mss.mss()
+        monitor_number = target_monitor_idx
 
-    monitor = {
-        # Captures the top left-most 800 x 600 of the monitor region
-        "top": mon["top"] + 40,  # 100px from the top
-        "left": mon["left"],  # 100px from the left
-        "width": resolution[0],
-        "height": resolution[1],
-        "mon": monitor_number,
-    }
+        mon = self.capturer.monitors[monitor_number]
+        # Using multiple monitors
+        if is_multi_monitor:
+            mon = self.capturer.monitors[monitor_number]
 
-    # Initialize timer to capture the interval between each process
-    previous_time = 0
-    while True:
-        frame = np.array(capturer.grab(monitor))
-        cv2.imshow('Captured Frame', process_frame(frame))
+        self.monitor = {
+            # Captures the top left-most 800 x 600 of the monitor region
+            "top": mon["top"] + 40,  # 100px from the top
+            "left": mon["left"],  # 100px from the left
+            "width": resolution[0],
+            "height": resolution[1],
+            "mon": monitor_number,
+        }
 
-        if cv2.waitKey( 1 ) & 0xFF == ord('q'):
-            cv2.destroyAllWindows()
-            break
+    def record_screen(self, processing_method=ImageProcess.process_default):
+        """
+        Captures a single frame
 
-        fps_txt = 'FPS: %.1f' % ( 1./(time.time() - previous_time))
-        previous_time = time.time()
+        :arg
+            processing_method (function): Type of frame processing defined in ImageProcess.py
+
+        :returns
+            frame(numpy array): Numpy array holding pixel data of captured frame
+        """
+
+        # Initialize timer to capture the interval between each process
+        previous_time = 0
+        frame = np.array(self.capturer.grab(self.monitor))
+        frame = np.flip(frame[:, :, :3], 2)
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        # cv2.imshow('Captured Frame', processing_method(frame))
+
+        # Elapsed time to capture a frame
+        fps_txt = 'FPS: %.1f' % (1./(time.time() - previous_time))
         print(fps_txt)
+
+        return frame
+
+
