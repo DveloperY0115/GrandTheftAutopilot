@@ -1,20 +1,14 @@
-import numpy as np
 import cv2
-import mss
-import mss.tools
-import time
-import pyautogui
 
 # User-defined functions and classes
-from DirectKeys import PressKey, W, A, S, D
 from ImageGrab import FrameCapture
 import ImageProcess
-from ObjectDetection import YOLO_net
+from ObjectDetection import YOLOv3_net
 
 
 if __name__ == "__main__":
 
-    network = YOLO_net()
+    network = YOLOv3_net()
     sct = FrameCapture((800, 600), True, 1)
 
     while True:

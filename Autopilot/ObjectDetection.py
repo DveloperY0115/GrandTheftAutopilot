@@ -2,14 +2,14 @@ import cv2
 import numpy as np
 
 
-class YOLO_net():
+class YOLOv3_net():
     """
     YOLO_net class for object detection
 
     TODO: Replace this network with Tensorflow based YOLOv4 algorithm
     """
     def __init__(self):
-        self.Net = cv2.dnn.readNet("YOLOV3/yolov3-tiny.weights", "YOLOV3/yolov3-tiny.cfg")
+        self.Net = cv2.dnn.readNet("YOLOv3/yolov3-tiny.weights", "YOLOv3/yolov3-tiny.cfg")
 
         self.classes = []
         with open("YOLOV3/yolo.names", "r") as f:
@@ -57,6 +57,7 @@ class YOLO_net():
 
         for i in range(len(boxes)):
             if i in indices:
+
                 x, y, w, h = boxes[i]
                 label = str(self.classes[class_ids[i]])
                 score = confidences[i]
