@@ -12,7 +12,7 @@ class YOLOv3_net():
         self.Net = cv2.dnn.readNet("YOLOv3/yolov3-tiny.weights", "YOLOv3/yolov3-tiny.cfg")
 
         self.classes = []
-        with open("YOLOV3/yolo.names", "r") as f:
+        with open("YOLOv3/yolo.names", "r") as f:
             self.classes = [line.strip() for line in f.readlines()]
         self.layer_names = self.Net.getLayerNames()
         self.output_layers = [self.layer_names[i[0] - 1] for i in self.Net.getUnconnectedOutLayers()]
