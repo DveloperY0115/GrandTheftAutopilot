@@ -47,16 +47,10 @@ class FrameCapture:
         :return frame: Numpy array holding pixel data of captured frame
         """
 
-        # Initialize timer to capture the interval between each process
-        previous_time = 0
         frame = np.array(self.capturer.grab(self.monitor))
         frame = np.flip(frame[:, :, :3], 2)
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         # cv2.imshow('Captured Frame', processing_method(frame))
-
-        # Elapsed time to capture a frame
-        fps_txt = 'FPS: %.1f' % (1./(time.time() - previous_time))
-        print(fps_txt)
 
         return frame
 

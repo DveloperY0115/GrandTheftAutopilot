@@ -34,7 +34,6 @@ def draw_lanes(frame, lines, color=[0, 255, 255], thickness=3):
         new_lines = []
 
 
-
     for line in lines:
         coords = line[0]
         cv2.line(frame, (coords[0], coords[1]), (coords[2], coords[3]),
