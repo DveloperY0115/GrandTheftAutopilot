@@ -1,3 +1,0 @@
-[submodule "Autopilot/YOLOv5/yolov5"]
-	path = Autopilot/YOLOv5/yolov5
-	url = https://github.com/ultralytics/yolov5.git
