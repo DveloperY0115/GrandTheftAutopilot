@@ -2,6 +2,7 @@ import cv2
 import time
 
 # User-defined functions and classes
+from YOLOv4 import detectvideo
 from ImageGrab import FrameCapture
 import ImageProcess
 from ObjectDetection import YOLOv3_net
