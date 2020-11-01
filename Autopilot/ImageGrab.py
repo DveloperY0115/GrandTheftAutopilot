@@ -6,6 +6,8 @@ import time
 import ImageProcess
 
 
+# TODO: There's resolution scaling problem in macOS
+
 class FrameCapture:
     """
     FrameCapture class for capturing and doing elementary processing on game screen

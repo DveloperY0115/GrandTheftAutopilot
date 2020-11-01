@@ -3,7 +3,6 @@ import time
 import argparse
 
 # User-defined functions and classes
-from YOLOv5.yolov5.detect import detect
 from ImageGrab import FrameCapture
 import ImageProcess
 from ObjectDetection import YOLOv3_net
@@ -31,7 +30,7 @@ if __name__ == "__main__":
 
     # Initialize model with parsed arguments
 
-    # network = YOLOv3_net()
+    network = YOLOv3_net()
     sct = FrameCapture((800, 600), True, 1)
 
     while True:
