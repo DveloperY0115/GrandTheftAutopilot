@@ -1,6 +1,8 @@
 import cv2
 import time
-import argparse
+import torch
+import numpy as np
+from PIL import Image, ImageDraw
 
 # User-defined functions and classes
 from ImageGrab import FrameCapture
@@ -10,34 +12,30 @@ from ObjectDetection import YOLOv3_net
 
 if __name__ == "__main__":
 
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--weights', nargs='+', type=str, default='yolov5s.pt', help='model.pt path(s)')
-    parser.add_argument('--source', type=str, default='inference/images', help='source')  # file/folder, 0 for webcam
-    parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
-    parser.add_argument('--conf-thres', type=float, default=0.25, help='object confidence threshold')
-    parser.add_argument('--iou-thres', type=float, default=0.45, help='IOU threshold for NMS')
-    parser.add_argument('--device', default='', help='cuda device, i.e. 0 or 0,1,2,3 or cpu')
-    parser.add_argument('--view-img', action='store_true', help='display results')
-    parser.add_argument('--save-txt', action='store_true', help='save results to *.txt')
-    parser.add_argument('--save-conf', action='store_true', help='save confidences in --save-txt labels')
-    parser.add_argument('--save-dir', type=str, default='inference/output', help='directory to save results')
-    parser.add_argument('--classes', nargs='+', type=int, help='filter by class: --class 0, or --class 0 2 3')
-    parser.add_argument('--agnostic-nms', action='store_true', help='class-agnostic NMS')
-    parser.add_argument('--augment', action='store_true', help='augmented inference')
-    parser.add_argument('--update', action='store_true', help='update all models')
-    opt = parser.parse_args()
-    print(opt)
+    # YOLOv5 - Model
+    model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True).fuse().eval()  # yolov5s.pt
+    model = model.autoshape()  # for autoshaping of PIL/cv2/np inputs and NMS
 
-    # Initialize model with parsed arguments
-
-    network = YOLOv3_net()
-    sct = FrameCapture((800, 600), True, 1)
+    sct = FrameCapture((800, 600), True, 2)
 
     while True:
         start_time = time.time()
         frame = sct.record_screen(ImageProcess.process_default)
 
-        frame = network.detect_objects(frame)
+        with torch.no_grad():
+            prediction = model(frame, size=900)  # includes NMS
+
+        img = frame
+
+        if prediction is not None:
+            for c in prediction[:, -1].unique():
+                n = (prediction[:, -1] == c).sum()  # detections per class
+                str += '%g %ss, ' % (n, model.names[int(c)])  # add to string
+            for *box, conf, cls in prediction:  # xyxy, confidence, class
+                label = model.names[int(cls)] if hasattr(model, 'names') else 'class_%g' % cls
+                str += '%s %.2f, ' % (label, conf)  # label
+                ImageDraw.Draw(img).rectangle(box, width=3)  # plot
+
         fps_txt = 'FPS: %.1f' % (1. / (time.time() - start_time))
         print(fps_txt)
         cv2.imshow('Does it work..?', frame)
