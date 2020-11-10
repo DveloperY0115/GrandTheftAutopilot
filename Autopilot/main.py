@@ -8,19 +8,21 @@ from PIL import Image, ImageDraw
 from ImageGrab import FrameCapture
 import ImageProcess
 from ObjectDetection import YOLOv3_net
-from LaneDetection import detect_lane
+from Ultra_Fast_Lane_Detection import LaneDetection
+
 
 
 if __name__ == "__main__":
-    ImageGrab.record_screen(True    , 2)
-    network = YOLO_net()
+    network = YOLOv3_net()
     img_w, img_h = 800, 600
     sct = FrameCapture((img_w, img_h), True, 1)
 
     while True:
         frame = sct.record_screen(ImageProcess.process_default)
-        frame = network.detect_objects(frame)
-        frame = detect_lane(frame)
+        out = network.detect_objects(frame)
+        frame = network.draw_boxes(frame, out[0], out[1], out[2])
+        frame = LaneDetection.detect_lane(frame)
+        print(type(frame))
         cv2.imshow('Frame', frame)
 
         if cv2.waitKey(25) & 0xFF == ord('q'):
