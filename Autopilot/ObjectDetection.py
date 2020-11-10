@@ -18,7 +18,11 @@ class YOLOv3_net():
         self.output_layers = [self.layer_names[i[0] - 1] for i in self.Net.getUnconnectedOutLayers()]
 
     def detect_objects(self, frame):
-
+        """
+        Make inference on the object in the given frame.
+        :param frame: The input frame containing objects that we want to detect.
+        :return: A tuple of lists required to draw bounding boxes. This consists of 'class_ids', 'confidences', 'boxes', 'indices'
+        """
         height, width, channel = frame.shape
 
         # inputs to YOLO network
@@ -55,6 +59,18 @@ class YOLOv3_net():
 
         indices = cv2.dnn.NMSBoxes(boxes, confidences, 0.45, 0.4)
 
+        return class_ids, confidences, boxes, indices
+
+
+    def draw_boxes(self, frame, class_ids, confidences, boxes, indices):
+         """
+        Draw bounding boxes with given data
+        :param frame: A frame to draw bounding boxes on
+        :param class_ids: A list containing class IDs of detected objects
+        :param confidences: A list containing confidence scores of each detection
+        :param boxes: A list of lists containing position, size information of bounding boxes
+        :return: An annotated frame
+        """
         for i in range(len(boxes)):
             if i in indices:
 
