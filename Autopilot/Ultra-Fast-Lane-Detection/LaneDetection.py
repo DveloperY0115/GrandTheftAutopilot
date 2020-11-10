@@ -60,11 +60,7 @@ if __name__ == "__main__":
 
     img_w, img_h = 1280, 720
     row_anchor = tusimple_row_anchor
-    cnt = 0
     while True:
-        cnt += 1
-        if cnt == 200:
-            break
         original_img = ImageGrab.grab(bbox=(0, 40, img_w, img_h))
         # we have to first transform original_img
         # transforms img to Tensor; torchSize: [3, 288, 800], type: torch.Tensor
