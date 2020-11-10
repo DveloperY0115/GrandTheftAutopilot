@@ -6,6 +6,7 @@
 # change pycharm interpreter to lane-det activated in step 2.
 ################################
 # On pycharm terminal, copy & paste this line.
+# activate lane-det
 # python LaneDetection.py configs/tusimple.py --test_model tusimple_18.pth
 # use tusimple model.
 
