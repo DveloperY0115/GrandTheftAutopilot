@@ -78,3 +78,32 @@ def process_default(frame):
     """
     original_frame = frame
     return original_frame
+
+def crop(image):
+    """
+    Crop the image (removing the sky at the top and the car front at the bottom)
+    """
+    return image[280:-130, :, :]
+
+
+def grayscale(img):
+    """
+    Applies the Grayscale transform
+    This will return an image with only one color channel
+    """
+    return cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)
+
+
+def canny(img, low_threshold=100, high_threshold=300):
+    """
+    Applies the Canny transform
+    """
+    return cv2.Canny(img, low_threshold, high_threshold)
+
+
+def gaussian_blur(img, kernel_size):
+    """
+    Applies a Gaussian Noise kernel
+    """
+    return cv2.GaussianBlur(img, (kernel_size, kernel_size), sigmaX=30, sigmaY=30)
+
