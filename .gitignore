@@ -253,3 +253,5 @@ dmypy.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,jetbrains
 *.pt
+Autopilot/YOLOv5/inference/images/bus.jpg
+Autopilot/YOLOv5/inference/images/zidane.jpg
