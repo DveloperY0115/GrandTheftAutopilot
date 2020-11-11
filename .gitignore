@@ -253,5 +253,7 @@ dmypy.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,jetbrains
 *.pt
-Autopilot/YOLOv5/inference/images/bus.jpg
-Autopilot/YOLOv5/inference/images/zidane.jpg
+*.pyc
+Autopilot/Ultra-Fast-Lane-Detection/data/__pycache__/constant.cpython-37.pyc
+Autopilot/Ultra-Fast-Lane-Detection/model/__pycache__/backbone.cpython-37.pyc
+Autopilot/Ultra-Fast-Lane-Detection/model/__pycache__/model.cpython-37.pyc

@@ -8,10 +8,27 @@ from PIL import Image, ImageDraw
 from ImageGrab import FrameCapture
 import ImageProcess
 from ObjectDetection import YOLOv3_net
+from Ultra_Fast_Lane_Detection import LaneDetection
+
 
 
 if __name__ == "__main__":
+    network = YOLOv3_net()
+    img_w, img_h = 800, 600
+    sct = FrameCapture((img_w, img_h), True, 1)
 
+    while True:
+        frame = sct.record_screen(ImageProcess.process_default)
+        out = network.detect_objects(frame)
+        frame = network.draw_boxes(frame, out[0], out[1], out[2])
+        frame = LaneDetection.detect_lane(frame)
+        print(type(frame))
+        cv2.imshow('Frame', frame)
+
+        if cv2.waitKey(25) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
+            break
+    '''
     # YOLOv5 - Model
     model = torch.hub.load('ultralytics/yolov5', 'yolov5s', pretrained=True).fuse().eval()  # yolov5s.pt
     model = model.autoshape()  # for autoshaping of PIL/cv2/np inputs and NMS
@@ -43,3 +60,4 @@ if __name__ == "__main__":
         if cv2.waitKey(25) & 0xFF == ord('q'):
             cv2.destroyAllWindows()
             break
+        '''
