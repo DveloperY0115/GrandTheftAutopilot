@@ -11,15 +11,15 @@
 # use tusimple model.
 
 import cv2
-from model.model import parsingNet
-from utils.common import merge_config
-from utils.dist_utils import dist_print
+from Autopilot.Ultra_Fast_Lane_Detection.model.model import parsingNet
+from Autopilot.Ultra_Fast_Lane_Detection.utils.common import merge_config
+from Autopilot.Ultra_Fast_Lane_Detection.utils.dist_utils import dist_print
 import torch
 import scipy.special
 import numpy as np
 import torchvision.transforms as transforms
 from PIL import ImageGrab
-from data.constant import tusimple_row_anchor
+from Autopilot.Ultra_Fast_Lane_Detection.data.constant import tusimple_row_anchor
 
 
 def detect_lane(img, img_w = 1280, img_h = 720):
