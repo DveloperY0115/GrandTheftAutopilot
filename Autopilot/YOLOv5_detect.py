@@ -30,6 +30,11 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 class YOLOv5_net:
     def __init__(self, weights_dir='yolov5s.pt', imgsz=800):
+        """
+        Initialize the YOLOv5 model with given weights and input size
+        :param weights_dir: File name of pytorch weight
+        :param imgsz: Size of input image
+        """
 
         # Initialize
         set_logging()
@@ -53,6 +58,11 @@ class YOLOv5_net:
         self.colors = [[random.randint(0, 255) for _ in range(3)] for _ in self.names]
 
     def detect(self, frame):
+        """
+        Given the frame, detect objects in the scene and classify them
+        :param frame: Numpy array form of image
+        :return: Tensor containing bounding box predictions and modified / original image
+        """
         t0 = time.time()
 
         # Test
@@ -70,7 +80,9 @@ class YOLOv5_net:
         pred = self.model(annotated)[0]
 
         # Apply NMS
-        pred = non_max_suppression(pred, 0.25, 0.45, classes=[0, 1, 2, 3, 5, 7, 9])
+        # ['person', 'bicycle', 'car', 'motorcycle', 'bus', 'truck', 'traffic light', 'stop sign']
+        target_class = [0, 1, 2, 3, 5, 7, 9]
+        pred = non_max_suppression(pred, 0.25, 0.45, classes=target_class)
         t2 = time_synchronized()
 
         # Apply classifier
@@ -81,9 +93,18 @@ class YOLOv5_net:
         return pred, annotated, frame
 
     def plot_boxes(self, pred, annotated, frame):
+        """
+        TODO: use of 'annotated' seems a bit redundant
+        Draw bounding boxes and their labels (with confidence) on the given image
+        :param pred: Tensor containing bounding box predictions
+        :param annotated: An annotated image
+        :param frame: An original image
+        :return: An image containing bounding boxes and their labels
+        """
         t0 = time.time()
         if pred[0] is None:
             # Nothing is detected
+            # DO NOTHING
             return frame
 
         # Process detections
