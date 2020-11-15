@@ -60,7 +60,6 @@ class YOLOv5_net:
         _ = self.model(annotated.half() if self.isHalf else annotated) if self.device.type != 'cpu' else None
 
         annotated = torch.from_numpy(frame).permute(2, 0, 1).to(self.device)
-        print(annotated.shape)
         annotated = annotated.half() if self.isHalf else annotated.float()
         annotated /= 255.0
         if annotated.ndimension() == 3:
@@ -71,14 +70,41 @@ class YOLOv5_net:
         pred = self.model(annotated)[0]
 
         # Apply NMS
-        pred = non_max_suppression(pred, 0.25, 0.45, classes=0, agnostic='store_true')
+        pred = non_max_suppression(pred, 0.25, 0.45, classes=[0, 1, 2, 3, 5, 7, 9])
+        t2 = time_synchronized()
 
+        # Apply classifier
+        if self.classify:
+            pred = apply_classifier(pred, self.modelc, annotated, frame)
+
+        print('Elapsed time for inference %.1f' % (t2-t1))
+        return pred, annotated, frame
+
+    def plot_boxes(self, pred, annotated, frame):
+        t0 = time.time()
+        if pred[0] is None:
+            # Nothing is detected
+            return frame
+
+        # Process detections
+        for i, det in enumerate(pred):
+            if det is not None and len(det):
+                # Rescale boxes from img_size to im0 size
+                det[:, :4] = scale_coords(annotated.shape[2:], det[:, :4], frame.shape).round()
+
+                for *xyxy, conf, cls in reversed(det):
+                    label = '%s %.2f' % (self.names[int(cls)], conf)
+                    plot_one_box(xyxy, frame, label=label, color=self.colors[int(cls)], line_thickness=3)
+        t1 = time.time()
+
+        print('Elapsed time for plotting %.1f' % (t1 - t0))
+        return frame
 
 if __name__ == '__main__':
 
     net = YOLOv5_net()
-    img_w, img_h = 800, 800
-    sct = FrameCapture((img_w, img_h), True, 2)
+    img_w, img_h = 640, 640
+    sct = FrameCapture((img_w, img_h), is_multi_monitor=True, target_monitor_idx=1)
 
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str, default='yolov5s.pt', help='model.pt path(s)')
@@ -101,7 +127,17 @@ if __name__ == '__main__':
     print(opt)
 
     while True:
+        t0 = time.time()
         frame = sct.record_screen(ImageProcess.process_default)
 
         with torch.no_grad():
-            pred = net.detect(frame)
+            result = net.detect(frame)
+
+        cv2.imshow('Frame', net.plot_boxes(result[0], result[1], result[2]))
+
+        # frame = LaneDetection.detect_lane(frame)
+        fps_txt = 'FPS: %.1f' % (1. / (time.time() - t0))
+        print(fps_txt)
+        if cv2.waitKey(25) & 0xFF == ord('q'):
+            cv2.destroyAllWindows()
+            break
