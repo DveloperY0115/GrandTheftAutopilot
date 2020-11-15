@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     network = YOLOv3_net()
     img_w, img_h = 800, 600
-    sct = FrameCapture((img_w, img_h), True, 1)
+    sct = FrameCapture((img_w, img_h), True, 2)
 
     while True:
         start_time = time.time()
