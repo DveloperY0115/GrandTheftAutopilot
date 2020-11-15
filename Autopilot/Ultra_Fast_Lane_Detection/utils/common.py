@@ -1,6 +1,6 @@
 import os, argparse
-from utils.dist_utils import is_main_process, dist_print, DistSummaryWriter
-from utils.config import Config
+from Autopilot.Ultra_Fast_Lane_Detection.utils.dist_utils import is_main_process, dist_print, DistSummaryWriter
+from Autopilot.Ultra_Fast_Lane_Detection.utils.config import Config
 import torch
 
 def str2bool(v):
@@ -15,7 +15,7 @@ def str2bool(v):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('config', help = 'path to config file')
+    # parser.add_argument('config', default = 'configs/tusimple.py', help = 'path to config file')
     parser.add_argument('--local_rank', type=int, default=0)
 
     parser.add_argument('--dataset', default = None, type = str)
@@ -40,15 +40,17 @@ def get_args():
     parser.add_argument('--log_path', default = None, type = str)
     parser.add_argument('--finetune', default = None, type = str)
     parser.add_argument('--resume', default = None, type = str)
-    parser.add_argument('--test_model', default = None, type = str)
+    parser.add_argument('--test_model', default = 'tusimple_18.pth', type = str)
     parser.add_argument('--test_work_dir', default = None, type = str)
     parser.add_argument('--num_lanes', default = None, type = int)
     return parser
 
 def merge_config():
     args = get_args().parse_args()
+    args.config = 'configs/tusimple.py'
+    args.test_model = 'tusimple_18.pth'
     cfg = Config.fromfile(args.config)
-
+    
     items = ['dataset','data_root','epoch','batch_size','optimizer','learning_rate',
     'weight_decay','momentum','scheduler','steps','gamma','warmup','warmup_iters',
     'use_aux','griding_num','backbone','sim_loss_w','shp_loss_w','note','log_path',

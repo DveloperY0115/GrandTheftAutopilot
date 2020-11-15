@@ -57,8 +57,8 @@ class YOLOv3_net():
                     confidences.append(float(confidence))
                     class_ids.append(class_id)
 
-
         return class_ids, confidences, boxes
+
 
     def draw_boxes(self, frame, class_ids, confidences, boxes):
         """
@@ -69,7 +69,6 @@ class YOLOv3_net():
         :param boxes: A list of lists containing position, size information of bounding boxes
         :return: An annotated frame
         """
-
         indices = cv2.dnn.NMSBoxes(boxes, confidences, 0.45, 0.4)
 
         for i in range(len(boxes)):
