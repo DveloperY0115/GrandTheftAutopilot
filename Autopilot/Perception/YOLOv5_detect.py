@@ -10,17 +10,17 @@ import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
 
-from Autopilot.ImageGrab import FrameCapture
-import Autopilot.ImageProcess as ImageProcess
-from Autopilot.ObjectDetection import YOLOv3_net
-from Autopilot.Ultra_Fast_Lane_Detection import LaneDetection
+from Autopilot.Perception.ImageGrab import FrameCapture
+import Autopilot.Perception.ImageProcess as ImageProcess
+from Autopilot.Perception.ObjectDetection import YOLOv3_net
+from Autopilot.Perception.Ultra_Fast_Lane_Detection import LaneDetection
 
-from Autopilot.YOLOv5.models.experimental import attempt_load
-from Autopilot.YOLOv5.utils.datasets import LoadStreams, LoadImages
-from Autopilot.YOLOv5.utils.general import check_img_size, non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, \
+from Autopilot.Perception.YOLOv5.models.experimental import attempt_load
+from Autopilot.Perception.YOLOv5.utils.datasets import LoadStreams, LoadImages
+from Autopilot.Perception.YOLOv5.utils.general import check_img_size, non_max_suppression, apply_classifier, scale_coords, xyxy2xywh, \
     strip_optimizer, set_logging, increment_path
-from Autopilot.YOLOv5.utils.plots import plot_one_box
-from Autopilot.YOLOv5.utils.torch_utils import select_device, load_classifier, time_synchronized
+from Autopilot.Perception.YOLOv5.utils.plots import plot_one_box
+from Autopilot.Perception.YOLOv5.utils.torch_utils import select_device, load_classifier, time_synchronized
 
 sys.path.insert(0, './YOLOv5')
 

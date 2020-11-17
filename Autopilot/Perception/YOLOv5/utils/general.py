@@ -17,9 +17,9 @@ import numpy as np
 import torch
 import yaml
 
-from Autopilot.YOLOv5.utils.google_utils import gsutil_getsize
-from Autopilot.YOLOv5.utils.metrics import fitness
-from Autopilot.YOLOv5.utils.torch_utils import init_torch_seeds
+from Autopilot.Perception.YOLOv5.utils.google_utils import gsutil_getsize
+from Autopilot.Perception.YOLOv5.utils.metrics import fitness
+from Autopilot.Perception.YOLOv5.utils.torch_utils import init_torch_seeds
 
 # Set printoptions
 torch.set_printoptions(linewidth=320, precision=5, profile='long')

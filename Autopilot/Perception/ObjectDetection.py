@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-class YOLOv3_net():
+class YOLOv3_net:
     """
     YOLO_net class for object detection
 

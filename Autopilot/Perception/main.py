@@ -6,10 +6,10 @@ import numpy as np
 from PIL import Image, ImageDraw
 
 # User-defined functions and classes
-from ImageGrab import FrameCapture
-import ImageProcess
-from ObjectDetection import YOLOv3_net
-from Autopilot.Ultra_Fast_Lane_Detection import LaneDetection
+from Autopilot.Perception.ImageGrab import FrameCapture
+import Autopilot.Perception.ImageProcess as ImageProcess
+from Autopilot.Perception.ObjectDetection import YOLOv3_net
+from Autopilot.Perception.Ultra_Fast_Lane_Detection import LaneDetection
 
 # To avoid OpenMP related error
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'

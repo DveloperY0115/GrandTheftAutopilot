@@ -1,6 +1,6 @@
 import os, argparse
-from Autopilot.Ultra_Fast_Lane_Detection.utils.dist_utils import is_main_process, dist_print, DistSummaryWriter
-from Autopilot.Ultra_Fast_Lane_Detection.utils.config import Config
+from Autopilot.Perception.Ultra_Fast_Lane_Detection.utils.dist_utils import is_main_process, dist_print, DistSummaryWriter
+from Autopilot.Perception.Ultra_Fast_Lane_Detection.utils.config import Config
 import torch
 
 def str2bool(v):
