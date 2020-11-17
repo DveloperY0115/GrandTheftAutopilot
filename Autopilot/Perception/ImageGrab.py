@@ -3,7 +3,7 @@ import cv2
 import mss
 import mss.tools
 import time
-import ImageProcess
+import Autopilot.Perception.ImageProcess as ImageProcess
 
 
 # TODO: There's resolution scaling problem in macOS

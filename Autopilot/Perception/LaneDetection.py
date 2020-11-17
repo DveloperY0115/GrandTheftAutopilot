@@ -2,7 +2,7 @@ import math
 
 import cv2
 import numpy as np
-from ImageProcess import crop, grayscale, canny, gaussian_blur, set_ROI
+from Autopilot.Perception.ImageProcess import crop, grayscale, canny, gaussian_blur, set_ROI
 from PIL import ImageGrab
 import time
 

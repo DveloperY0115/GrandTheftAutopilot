@@ -4,8 +4,8 @@ import numpy as np
 import torch
 import torch.nn as nn
 
-from Autopilot.YOLOv5.models.common import Conv, DWConv
-from Autopilot.YOLOv5.utils.google_utils import attempt_download
+from Autopilot.Perception.YOLOv5.models.common import Conv, DWConv
+from Autopilot.Perception.YOLOv5.utils.google_utils import attempt_download
 
 
 class CrossConv(nn.Module):

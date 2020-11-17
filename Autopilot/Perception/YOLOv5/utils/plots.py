@@ -16,8 +16,8 @@ import yaml
 from PIL import Image
 from scipy.signal import butter, filtfilt
 
-from Autopilot.YOLOv5.utils.general import xywh2xyxy, xyxy2xywh
-from Autopilot.YOLOv5.utils.metrics import fitness
+from Autopilot.Perception.YOLOv5.utils.general import xywh2xyxy, xyxy2xywh
+from Autopilot.Perception.YOLOv5.utils.metrics import fitness
 
 
 def color_list():
