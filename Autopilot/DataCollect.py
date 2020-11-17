@@ -5,7 +5,7 @@ import datetime
 # import Autopilot.Perception.ImageGrab as ImageGrab
 from PIL import ImageGrab
 
-cwd = os.getcwd()
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 img_w, img_h = 800,600
 
@@ -13,7 +13,9 @@ img_w, img_h = 800,600
 # for example, 2020-11-17-20:50:34_w
 def save_data(data_img, control):
     # if control == 'w' or control == 'd': continue
-    file_path = str(cwd) + '/' + datetime.datetime.utcnow().strftime("%y-%m-%d:%H:%M:%S") + '.jpg' # numpy array
+    # save captured images in 'Autopilot/dataset/imgs/(file names)''
+    target_directory = 'dataset/imgs'
+    file_path =  datetime.datetime.utcnow().strftime("%y-%m-%d:%H:%M:%S") + "_" + control + '.jpg' # numpy array
     cv2.imwrite(file_path, data_img)
 
 
