@@ -71,14 +71,14 @@ def train_model(model, args, data, indexes_train, indexes_valid):
     # For instance, this allows you to do real-time data augmentation on images on CPU in
     # parallel to training your model on GPU.
     # so we reshape our data into their appropriate batches and train our model simultaneously
-    model.fit_generator(batch_generator(data, indexes_train, args.batch_size, True),
-                        steps_per_epoch=len(indexes_train) / args.batch_size,
-                        epochs=args.nb_epoch,
-                        max_queue_size=1,
-                        validation_data=batch_generator(data, indexes_valid, args.batch_size, False),
-                        validation_steps=len(indexes_valid) / args.batch_size,
-                        callbacks=[checkpoint],
-                        verbose=1)
+    model.fit(batch_generator(data, indexes_train, args.batch_size, True),
+                steps_per_epoch=len(indexes_train) / args.batch_size,
+                epochs=args.nb_epoch,
+                max_queue_size=1,
+                validation_data=batch_generator(data, indexes_valid, args.batch_size, False),
+                validation_steps=len(indexes_valid) / args.batch_size,
+                callbacks=[checkpoint],
+                verbose=1)
 
 
 # for command line args
