@@ -4,7 +4,7 @@ import numpy as np
 import datetime
 # import Autopilot.Perception.ImageGrab as ImageGrab
 from PIL import ImageGrab
-
+radar_bbox=(20,600,200,720)
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 img_w, img_h = 800,600

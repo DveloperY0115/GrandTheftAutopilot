@@ -1,12 +1,38 @@
 """
 NN model
 """
-
-from keras.layers import Lambda, Conv2D, Dropout, Dense, Flatten, Concatenate, Input, MaxPooling2D
-from keras.models import Model
+from tensorflow import Tensor
+from tensorflow.keras.layers import Input, Dense, Conv2D, Flatten, MaxPooling2D, Add, ReLU, Lamda
+from tensorflow.keras.models import Model
 
 from training.utils import INPUT_SHAPE
 
+# relu_bn for resnet
+def relu_bn(inputs: Tensor) -> Tensor:
+    relu = ReLU()(inputs)
+    bn = BatchNormalization()(relu)
+    return bn
+
+# residual_block for resnet
+def residual_block(x: Tensor, downsample: bool, filters: int, kernel_size: int = 3):
+    y = Conv2D(kernel_size=kernel_size,
+               strides= (1 if not downsample else 2),
+               filters=filters,
+               padding="same")(x)
+    y = relu_bn(y)
+    y = Conv2D(kernel_size=kernel_size,
+               strides=1,
+               filters=filters,
+               padding="same")(y)
+
+    if downsample:
+        x = Conv2D(kernel_size=1,
+                   strides=2,
+                   filters=filters,
+                   padding="same")(x)
+    out = Add()([x, y])
+    out = relu_bn(out)
+    return out
 
 def build_model(args):
     # image model
@@ -21,7 +47,25 @@ def build_model(args):
     img_model = (Flatten())(img_model)
     img_model = (Dense(100, activation='elu'))(img_model)
 
-    """
+    # image model implemented with resnet
+    img_input = Input(shape=INPUT_SHAPE)
+    num_filters = 16
+
+    resnet_model = BatchNormalization()(img_input)
+    resnet_model = Conv2D(kernel_size=3, strides=1,
+                        filters=num_filters,
+                        padding="same")(resnet_model)
+    resnet_model = relu_bn(resnet_model)
+    resnet_model = residual_block(resnet_model, downsample=True, filters=num_filters)
+    num_filters *= 2
+    resnet_model = residual_block(resnet_model, downsample=True, filters=num_filters)
+    num_filters *= 2
+    resnet_model = residual_block(resnet_model, downsample=True, filters=num_filters)
+    # resnet_model = residual_block(resnet_model, downsample=True, filters=num_filters)
+    resnet_model = AveragePooling2D(4)(resnet_model)
+    resnet_model = Flatten()(resnet_model)
+    resnet_model = Dense(100,activation='relu')(resnet_model)
+
     # radar model
     radar_input = Input(shape=RADAR_SHAPE)
     radar_model = (Conv2D(32, (5, 5), activation='elu'))(radar_input)
@@ -34,9 +78,7 @@ def build_model(args):
 
     # speed
     speed_input = Input(shape=(1,))
-    """
 
-    """
     # combined model
     out = Concatenate()([img_model, radar_model])
     out = (Dense(50, activation='elu'))(out)
@@ -45,7 +87,6 @@ def build_model(args):
     out = (Dense(1))(out)
 
     final_model = Model(inputs=[img_input, radar_input, speed_input], outputs=out)
-    """
 
     final_model = img_model
     final_model.summary()
