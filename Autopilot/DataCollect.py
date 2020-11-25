@@ -4,7 +4,9 @@ import numpy as np
 import datetime
 # import Autopilot.Perception.ImageGrab as ImageGrab
 from PIL import ImageGrab
-radar_bbox=(20,600,200,720)
+# 1280 * 720
+radar_bbox = (20,600,200,720)
+direction_bbox = (30,710,42,720)
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 img_w, img_h = 800,600
@@ -23,7 +25,7 @@ def main():
     while True:
         img = np.array(ImageGrab.grab(bbox=(0,40,800,640)))
         cv2.imshow("Frame", original_img)
-        key = cv2.waitKey(1) & 0xFF
+        key = cv2.waitKey(1) & 0xFF`
         save_data(img, chr(key)) # lower case alphabet
         if key == ord("q"):
             cv2.destroyAllWindows()
