@@ -56,6 +56,12 @@ class FrameCapture:
 class FrameProcessor:
     """
     FrameProcessor class for modifying obtained images from FrameCapture
+
+    For efficiency, this class is designed to be used without creating an instance of it so you can simply:
+
+    (output_var) = FrameProcessor.grayscale(input_var)
+
+    where both (output_var) and (input_var) are guaranteed to be numpy.ndarray type.
     """
     def set_ROI(frame, vertices):
         """
@@ -117,6 +123,7 @@ class FrameProcessor:
     @staticmethod
     def process_frame(frame):
         """
+        TODO: Is there any way to provide all processing information at once and then process it automatically?
         Processes the given frame using a set of elementary processing algorithms
         - RGB to Grayscale
         - Edge detection
