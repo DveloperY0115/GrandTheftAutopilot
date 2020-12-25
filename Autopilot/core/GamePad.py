@@ -1,7 +1,7 @@
 import sys
 from ctypes import *
 
-dll_path = "vXboxInterface.dll"
+dll_path = "../vXboxInterface.dll"
 
 try:
     _vx = cdll.LoadLibrary(dll_path)
