@@ -35,11 +35,11 @@ This repo provides a clean implementation of YoloV3 in TensorFlow 2.0 using all 
 ```bash
 # Tensorflow CPU
 conda env create -f conda-cpu.yml
-conda activate yolov3-tf2-cpu
+conda activate yolov3_tf2-cpu
 
 # Tensorflow GPU
 conda env create -f conda-gpu.yml
-conda activate yolov3-tf2-gpu
+conda activate yolov3_tf2-gpu
 ```
 
 #### Pip
