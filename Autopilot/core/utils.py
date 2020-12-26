@@ -20,7 +20,7 @@ class FrameCapture:
     :return an instance of FrameCapture class
     """
 
-    def __init__(self, resolution=(800, 600), is_multi_monitor=False, target_monitor_idx=0):
+    def __init__(self, resolution=(400, 300), is_multi_monitor=False, target_monitor_idx=0):
         self.capturer = mss.mss()
         monitor_number = target_monitor_idx
 
@@ -30,8 +30,8 @@ class FrameCapture:
             mon = self.capturer.monitors[monitor_number]
 
         self.monitor = {
-            "top": mon["top"] + 40,  # 100px from the top
-            "left": mon["left"],  # 100px from the left
+            "top": mon["top"],
+            "left": mon["left"] + 40,
             "width": resolution[0],
             "height": resolution[1],
             "mon": monitor_number,
