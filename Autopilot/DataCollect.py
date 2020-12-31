@@ -5,6 +5,7 @@ import datetime
 # import Autopilot.Perception.ImageGrab as ImageGrab
 from PIL import ImageGrab
 import win32api as wapi
+import pandas as pd
 
 # 1280 * 720
 mapview_bbox = (5, 520, 160, 630)
@@ -51,25 +52,25 @@ def capture_direction():
 def save_data(frontview_img, mapview_img, direction_img, control):
     # if control == 'w' or control == 'd': continue
     # save captured images in 'Autopilot/dataset/imgs/(file names)''
-    target_directory = 'dataset/imgs'
-    frontview_file_path = datetime.datetime.utcnow().strftime(
+    target_directory = './dataset/imgs/'
+    frontview_filename = datetime.datetime.utcnow().strftime(
         "%y-%m-%d:%H:%M:%S") + "_" + "frontview" + '.jpg'  # numpy array
-    mapview_file_path = datetime.datetime.utcnow().strftime(
+    mapview_filename = datetime.datetime.utcnow().strftime(
         "%y-%m-%d:%H:%M:%S") + "_" + "mapviewview" + '.jpg'  # numpy array
-    direction_file_path = datetime.datetime.utcnow().strftime(
+    direction_filename = datetime.datetime.utcnow().strftime(
         "%y-%m-%d:%H:%M:%S") + "_" + "direction" + '.jpg'  # numpy array
 
-    cv2.imwrite(frontview_file_path, frontview_img)
-    cv2.imwrite(mapview_file_path, mapview_img)
-    cv2.imwrite(direction_file_path, direction_img)
+    cv2.imwrite(target_directory + frontview_filename, frontview_img)
+    cv2.imwrite(target_directory + mapview_filename, mapview_img)
+    cv2.imwrite(target_directory + direction_filename, direction_img)
 
-    temp_dict = {'frontview': frontview_file_path, 'mapviewview': mapview_file_path,
-                 'direction': direction_file_path, 'control': control, 'speed': 0}
-    print(temp_dict)
-    return
-
+    temp_dict = {'frontview': frontview_filename, 'mapviewview': mapview_filename,
+                 'direction': direction_filename, 'control': control, 'speed': 0}
+    return temp_dict
 
 def main():
+    index = 0
+    data_dict = {}
     while True:
         frontview = capture_frontview()
         mapview = capture_mapview()
@@ -79,12 +80,17 @@ def main():
         cv2.imshow("mapview", cv2.cvtColor(mapview, cv2.COLOR_BGR2RGB))
         cv2.imshow("Direction", cv2.cvtColor(direction, cv2.COLOR_BGR2RGB))
         print(keyinput)
-        save_data(frontview, mapview, direction, keyinput)
+        data_log = save_data(frontview, mapview, direction, keyinput)
+        print(data_log)
+        index+=1
+        data_dict[index] = data_log
 
         key = cv2.waitKey(1) & 0xFF
         # save_data(img, chr(key)) # lower case alphabet
         if key == ord("q"):
             cv2.destroyAllWindows()
+            dataset = pd.DataFrame.from_dict(data_dict, orient='index')
+            dataset.to_csv('./dataset/dataset.csv')
             break
         # img = np.array(ImageGrab.grab(bbox=(0,40,800,640)))
         # cv2.imshow("Frame", original_img)
