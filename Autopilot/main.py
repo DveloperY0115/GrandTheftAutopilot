@@ -12,11 +12,19 @@ def main(_argv):
 
     # initialize capture/detection tools
 
-    capture = FrameCapture()
+    # TODO: Format of file path is different on Windows and Linux/macOS
+    main_abs = os.path.abspath(os.path.dirname(__file__))
+    class_abs = os.path.join(main_abs, "library\yolov3_tf2\data\coco.names")
+    weight_abs = os.path.join(main_abs, "library\yolov3_tf2\checkpoints\yolo3.tf")
+
+    print(class_abs)
+    print(weight_abs)
+
+    capture = FrameCapture(resolution=(800,600), is_multi_monitor=True, target_monitor_idx=0)
 
     detector = detect.Detector(
-        classes='./library/yolov3_tf2/data/coco.names',
-        weights='./library/yolov3_tf2/checkpoints/yolov3.tf',
+        classes=class_abs,
+        weights=weight_abs,
         tiny=False, size=416, num_classes=80
     )
 

@@ -1,3 +1,3 @@
-import detect as detect
-import utils as utils
+import core.detect as detect
+import core.utils as utils
 
