@@ -11,6 +11,32 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 img_w, img_h = 800,600
 
+import win32api as wapi
+
+keyList = ["\b"]
+for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789,.'£$/\\":
+    keyList.append(char)
+
+def capture_key():
+    for key in keyList:
+        if wapi.GetAsyncKeyState(ord(key)):
+            if key == 'A':
+                return 'A'
+            elif key =='D':
+                return 'D'
+            else:
+                return
+    return
+
+def capture_frontview():
+    img = np.array(ImageGrab.grab(bbox=(0, 40, 800, 640)))
+    return img
+
+def capture_mapview():
+    img = np.array(ImageGrab.grab(bbox=(0, 40, 800, 640)))
+    return img
+
+
 # save format: date_key (key is one of w,a,s,d)
 # for example, 2020-11-17-20:50:34_w
 def save_data(data_img, control):
@@ -23,10 +49,14 @@ def save_data(data_img, control):
 
 def main():
     while True:
-        img = np.array(ImageGrab.grab(bbox=(0,40,800,640)))
-        cv2.imshow("Frame", original_img)
-        key = cv2.waitKey(1) & 0xFF`
-        save_data(img, chr(key)) # lower case alphabet
-        if key == ord("q"):
-            cv2.destroyAllWindows()
-            break
+        frontview = capture_frontview()
+        # mapview = capture_mapview()
+        key = capture_key()
+        print(frontview + " " + key)
+        #img = np.array(ImageGrab.grab(bbox=(0,40,800,640)))
+        # cv2.imshow("Frame", original_img)
+        # key = cv2.waitKey(1) & 0xFF
+        # save_data(img, chr(key)) # lower case alphabet
+        # if key == ord("q"):
+        #     cv2.destroyAllWindows()
+        #     break
