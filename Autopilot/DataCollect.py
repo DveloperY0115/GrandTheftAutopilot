@@ -7,8 +7,8 @@ from PIL import ImageGrab
 import win32api as wapi
 
 # 1280 * 720
-map_bbox = (20, 600, 200, 720)
-direction_bbox = (30, 710, 42, 720)
+map_bbox = (5, 520, 160, 630)
+direction_bbox = (15, 610, 25, 620)
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 img_w, img_h = 800, 600
@@ -62,9 +62,9 @@ def main():
         map = capture_map()
         direction = capture_direction()
         keyinput = capture_key()
-        cv2.imshow("Frontview", frontview)
-        cv2.imshow("Map", map)
-        cv2.imshow("Direction", direction)
+        cv2.imshow("Frontview", cv2.cvtColor(frontview, cv2.COLOR_BGR2RGB))
+        cv2.imshow("Map", cv2.cvtColor(map, cv2.COLOR_BGR2RGB))
+        cv2.imshow("Direction", cv2.cvtColor(direction, cv2.COLOR_BGR2RGB))
         print(keyinput)
 
         key = cv2.waitKey(1) & 0xFF
@@ -79,3 +79,5 @@ def main():
         # if key == ord("q"):
         #     cv2.destroyAllWindows()
         #     break
+
+main()
