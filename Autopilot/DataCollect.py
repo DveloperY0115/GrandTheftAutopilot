@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import datetime
 # import Autopilot.Perception.ImageGrab as ImageGrab
-from PIL import ImageGrab
+from PIL import ImageGrab, Image
 import win32api as wapi
 import pandas as pd
 
@@ -54,12 +54,14 @@ def save_data(frontview_img, mapview_img, direction_img, control):
     # save captured images in 'Autopilot/dataset/imgs/(file names)''
     target_directory = './dataset/imgs/'
     frontview_filename = datetime.datetime.utcnow().strftime(
-        "%y-%m-%d:%H:%M:%S") + "_" + "frontview" + '.jpg'  # numpy array
+        "%y-%m-%d_%H_%M_%S") + "_" + "frontview" + '.jpg'  # numpy array
     mapview_filename = datetime.datetime.utcnow().strftime(
-        "%y-%m-%d:%H:%M:%S") + "_" + "mapviewview" + '.jpg'  # numpy array
+        "%y-%m-%d_%H_%M_%S") + "_" + "mapviewview" + '.jpg'  # numpy array
     direction_filename = datetime.datetime.utcnow().strftime(
-        "%y-%m-%d:%H:%M:%S") + "_" + "direction" + '.jpg'  # numpy array
-
+        "%y-%m-%d_%H_%M_%S") + "_" + "direction" + '.jpg'  # numpy array
+    # frontview_img = Image.fromarray(frontview_img)
+    # frontview_img.save(target_directory + frontview_filename)
+    print('directory: ', target_directory + frontview_filename)
     cv2.imwrite(target_directory + frontview_filename, frontview_img)
     cv2.imwrite(target_directory + mapview_filename, mapview_img)
     cv2.imwrite(target_directory + direction_filename, direction_img)
@@ -76,9 +78,12 @@ def main():
         mapview = capture_mapview()
         direction = capture_direction()
         keyinput = capture_key()
-        cv2.imshow("Frontview", cv2.cvtColor(frontview, cv2.COLOR_BGR2RGB))
-        cv2.imshow("mapview", cv2.cvtColor(mapview, cv2.COLOR_BGR2RGB))
-        cv2.imshow("Direction", cv2.cvtColor(direction, cv2.COLOR_BGR2RGB))
+        frontview = cv2.cvtColor(frontview, cv2.COLOR_BGR2RGB)
+        mapview = cv2.cvtColor(mapview, cv2.COLOR_BGR2RGB)
+        direction = cv2.cvtColor(direction, cv2.COLOR_BGR2RGB)
+        cv2.imshow("Frontview", frontview)
+        cv2.imshow("mapview", mapview)
+        cv2.imshow("Direction", direction)
         print(keyinput)
         data_log = save_data(frontview, mapview, direction, keyinput)
         print(data_log)
