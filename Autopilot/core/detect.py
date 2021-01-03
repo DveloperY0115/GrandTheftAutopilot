@@ -32,7 +32,7 @@ class Detector:
         """
         Initializes detector class using options provided by user
         :param classes: String. Path to the file which contains the information of detectable classes
-        :param weights: String. Path to tensorflow weight file
+        :param weights: String. Path to tensorflow weights file
         :param tiny: Boolean. If True, initialize detector with smaller version of YOLO
         :param size: Int. The size which the input image will be resized to
         :param num_classes: Number of classes the model aims to distinguish
@@ -51,7 +51,7 @@ class Detector:
             self.model = YoloV3(classes=num_classes)
             logging.info('Using YoloV3')
 
-        self.model.load_weights(weights)     # load weight from specified path
+        self.model.load_weights(weights)     # load weights from specified path
         logging.info('weights loaded')
 
         self.size = size
@@ -69,6 +69,7 @@ class Detector:
 
         t1 = time.time()
         boxes, scores, classes, nums = self.model(img)
+
         t2 = time.time()
         logging.info('Inference time: {}'.format(t2 - t1))
 
@@ -77,8 +78,8 @@ class Detector:
             logging.info('\t{}, {}, {}'.format(self.class_names[int(classes[0][i])],
                                                np.array(scores[0][i]),
                                                np.array(boxes[0][i])))
+
         img = img_raw.numpy()
         img = draw_outputs(img, (boxes, scores, classes, nums), self.class_names)
+
         return img
-
-
