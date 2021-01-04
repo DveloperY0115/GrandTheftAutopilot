@@ -34,5 +34,5 @@ jobs:
     #    flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Run test codes
       run: |
-        python ./tests/test_ci.py
+        python ./Autopilot/tests/test_ci.py
         
