@@ -9,7 +9,7 @@ import pandas as pd
 
 from core.img_process import *
 
-ImgProc = Image_Processor
+ImgProc = Image_Processor()
 
 # 800 * 600
 
@@ -18,7 +18,6 @@ ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
 class DataCollect:
-    #### Global Variables ####
     # drive_view_bbox = (0, 40, 800, 640)
     mapview_bbox = (5, 480, 160, 590)
     direction_bbox = (15, 570, 25, 580)
@@ -38,6 +37,8 @@ class DataCollect:
                     return 'A'
                 elif button == 'D':
                     return 'D'
+                elif button == 'X':
+                    return 'X'
                 else:
                     return
         return
@@ -88,11 +89,15 @@ if __name__ == '__main__':
     dc = DataCollect()
     while True:
         key_input = dc.capture_key()
-        if key_input == "X":
+        if key_input == 'x':
             start_flag = True
+
+        print(key_input)
 
         if not start_flag:
             continue
+
+        print(start_flag)
 
         # Capture All images and Change them to RGB
         drive_view = dc.capture_drive_view()
