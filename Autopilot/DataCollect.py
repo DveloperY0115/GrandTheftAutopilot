@@ -56,7 +56,7 @@ def save_data(frontview_img, mapview_img, direction_img, control):
     frontview_filename = datetime.datetime.utcnow().strftime(
         "%y-%m-%d_%H_%M_%S") + "_" + "frontview" + '.jpg'  # numpy array
     mapview_filename = datetime.datetime.utcnow().strftime(
-        "%y-%m-%d_%H_%M_%S") + "_" + "mapviewview" + '.jpg'  # numpy array
+        "%y-%m-%d_%H_%M_%S") + "_" + "mapview" + '.jpg'  # numpy array
     direction_filename = datetime.datetime.utcnow().strftime(
         "%y-%m-%d_%H_%M_%S") + "_" + "direction" + '.jpg'  # numpy array
     # frontview_img = Image.fromarray(frontview_img)
@@ -66,9 +66,10 @@ def save_data(frontview_img, mapview_img, direction_img, control):
     cv2.imwrite(target_directory + mapview_filename, mapview_img)
     cv2.imwrite(target_directory + direction_filename, direction_img)
 
-    temp_dict = {'frontview': frontview_filename, 'mapviewview': mapview_filename,
+    temp_dict = {'frontview': frontview_filename, 'mapview': mapview_filename,
                  'direction': direction_filename, 'control': control, 'speed': 0}
     return temp_dict
+
 
 def main():
     index = 0
@@ -87,7 +88,7 @@ def main():
         print(keyinput)
         data_log = save_data(frontview, mapview, direction, keyinput)
         print(data_log)
-        index+=1
+        index += 1
         data_dict[index] = data_log
 
         key = cv2.waitKey(1) & 0xFF
@@ -95,7 +96,8 @@ def main():
         if key == ord("q"):
             cv2.destroyAllWindows()
             dataset = pd.DataFrame.from_dict(data_dict, orient='index')
-            dataset.to_csv('./dataset/dataset.csv')
+            dataset_name = datetime.datetime.utcnow().strftime("%y-%m-%d_%H_%M_%S")+"_dataset.csv"
+            dataset.to_csv(dataset_name)
             break
         # img = np.array(ImageGrab.grab(bbox=(0,40,800,640)))
         # cv2.imshow("Frame", original_img)
