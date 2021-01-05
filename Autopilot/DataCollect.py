@@ -87,12 +87,12 @@ if __name__ == '__main__':
     data_dict = {}
     while True:
         keyinput = capture_key()
-        if keyinput = "X":
+        if keyinput == "X":
             start_flag = True
 
         if start_flag == False:
             continue
-        
+
         # Capture All images and Change them to RGB
         frontview = capture_frontview()
         mapview = capture_mapview(frontview)
