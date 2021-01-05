@@ -5,9 +5,9 @@ name: Python application
 
 on:
   push:
-    branches: [ master, add-ci ]
+    branches: [ master, datacollect ]
   pull_request:
-    branches: [ master, add-ci ]
+    branches: [ master, datacollect ]
 
 jobs:
   build:
