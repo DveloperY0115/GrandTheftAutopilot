@@ -1,7 +1,7 @@
 # Created by https://www.toptal.com/developers/gitignore/api/python,jetbrains
 # Edit at https://www.toptal.com/developers/gitignore?templates=python,jetbrains
 
-# Do not track weight files
+# Do not track weights files
 *.weights
 *.cfg
 *.pth
