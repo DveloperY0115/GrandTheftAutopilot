@@ -23,9 +23,6 @@ def main(_argv):
     class_abs = os.path.join(main_abs, "library\yolov3_tf2\data\coco.names")
     weight_abs = os.path.join(main_abs, "library\yolov3_tf2\checkpoints\yolo3.tf")
 
-    # capture = FrameCapture(resolution=(800,600), is_multi_monitor=True, target_monitor_idx=1)
-
-
     detector = detect.Detector(
         classes=class_abs,
         weights=weight_abs,
