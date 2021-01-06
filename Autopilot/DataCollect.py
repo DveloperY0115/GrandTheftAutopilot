@@ -122,3 +122,11 @@ if __name__ == '__main__':
         #         "%y%m%d_%H-%M-%S") + "_dataset.csv"
         #     dataset.to_csv(dataset_name)
         #     break
+
+        if cv2.waitKey(25) & 0xFF == ord("q"):
+            cv2.destroyAllWindows()
+            dataset = pd.DataFrame.from_dict(data_dict, orient='index')
+            dataset_name = dc.target_folder + datetime.datetime.utcnow().strftime(
+                "%y%m%d_%H-%M-%S") + "_dataset.csv"
+            dataset.to_csv(dataset_name)
+            break
