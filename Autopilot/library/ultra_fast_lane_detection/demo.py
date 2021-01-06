@@ -1,13 +1,13 @@
 import torch, os, cv2
-from model.model import parsingNet
-from utils.common import merge_config
-from utils.dist_utils import dist_print
+from Autopilot.library.ultra_fast_lane_detection.model.model import parsingNet
+from Autopilot.library.ultra_fast_lane_detection.utils.common import merge_config
+from Autopilot.library.ultra_fast_lane_detection.utils.dist_utils import dist_print
 import torch
 import scipy.special, tqdm
 import numpy as np
 import torchvision.transforms as transforms
-from data.dataset import LaneTestDataset
-from data.constant import culane_row_anchor, tusimple_row_anchor
+from Autopilot.library.ultra_fast_lane_detection.data.dataset import LaneTestDataset
+from Autopilot.library.ultra_fast_lane_detection.data.constant import culane_row_anchor, tusimple_row_anchor
 
 if __name__ == "__main__":
     torch.backends.cudnn.benchmark = True
