@@ -44,6 +44,8 @@ class DataCollect:
                     return 'A'
                 elif button == 'D':
                     return 'D'
+                elif button == 'W':
+                    return 'W'
                 elif button == 'S':
                     return 'S'
                 elif button == 'E':
@@ -67,14 +69,8 @@ class DataCollect:
         cv2.imwrite(mapview_filename, mapview_img)
         cv2.imwrite(direction_filename, direction_img)
 
-        if control is None:
-            control = "None"
-
-        if control is "S" or "E":
-            control = "None"
-
         temp_dict = {'drive_view': drive_view_filename, 'mapview': mapview_filename,
-                     'direction': direction_filename, 'control': control, 'speed': 0}
+                     'direction': direction_filename, 'control': control}
         return temp_dict
 
 
@@ -115,6 +111,7 @@ if __name__ == '__main__':
         cv2.imshow("Direction", direction)
 
         data_log = dc.save_data(drive_view, mapview, direction, key_input)
+        # print(key_input)
         print(data_log)
 
         index += 1
