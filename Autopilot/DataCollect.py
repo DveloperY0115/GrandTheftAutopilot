@@ -66,8 +66,8 @@ class DataCollect:
             "%y%m%d_%H-%M-%S") + "_" + "direction" + '.jpg'  # numpy array
 
         cv2.imwrite(drive_view_filename, drive_view_img)
-        cv2.imwrite(mapview_filename, mapview_img)
-        cv2.imwrite(direction_filename, direction_img)
+        # cv2.imwrite(mapview_filename, mapview_img)
+        # cv2.imwrite(direction_filename, direction_img)
 
         temp_dict = {'drive_view': drive_view_filename, 'mapview': mapview_filename,
                      'direction': direction_filename, 'control': control}
