@@ -4,6 +4,7 @@ import datetime
 import win32api as wapi
 import pandas as pd
 import os
+from utils import resize
 
 from core.img_process import Image_Processor
 
@@ -24,12 +25,6 @@ class DataCollect:
                 os.makedirs(self.target_folder)
             if not os.path.exists(self.target_folder + "imgs"):
                 os.makedirs(self.target_folder + "imgs")
-            if not os.path.exists(self.target_folder + "imgs/drive_view"):
-                os.makedirs(self.target_folder + "imgs/drive_view")
-            if not os.path.exists(self.target_folder + "imgs/mapview"):
-                os.makedirs(self.target_folder + "imgs/mapview")
-            if not os.path.exists(self.target_folder + "imgs/direction"):
-                os.makedirs(self.target_folder + "imgs/direction")
 
         except OSError:
             print('Error: Creating directory.')
@@ -57,15 +52,13 @@ class DataCollect:
     def save_data(self, drive_view_img, mapview_img, direction_img, control, index):
         # if control == 'w' or control == 'd': continue
         # save captured images in 'Autopilot/dataset/imgs/(file names)''
-        target_directory = self.target_folder + 'imgs/'
-        drive_view_filename = target_directory + 'drive_view/' + datetime.datetime.utcnow().strftime(
-            "%y%m%d_%H-%M-%S") + "_" + "drive_view" + str(index) + '.jpg'  # numpy array
-
-        cv2.imwrite(drive_view_filename, drive_view_img)
+        target_filename = self.target_folder + 'imgs/' + "drive_view" + str(index) + '.jpg'  # numpy array
+        # # + datetime.datetime.utcnow().strftime("%y%m%d_%H-%M-%S")
+        resize(drive_view_img)
+        cv2.imwrite(target_filename, drive_view_img)
         # cv2.imwrite(mapview_filename, mapview_img)
         # cv2.imwrite(direction_filename, direction_img)
-
-        temp_dict = {'drive_view': drive_view_filename, 'control': control}
+        temp_dict = {'drive_view': target_filename, 'control': control}
         return temp_dict
 
 
@@ -79,8 +72,7 @@ if __name__ == '__main__':
         if cv2.waitKey(25) & 0xFF == ord("q"):
             cv2.destroyAllWindows()
             dataset = pd.DataFrame.from_dict(data_dict, orient='index')
-            dataset_name = dc.target_folder + datetime.datetime.utcnow().strftime(
-                "%y%m%d_%H-%M-%S") + "_dataset.csv"
+            dataset_name = dc.target_folder + "dataset.csv"
             dataset.to_csv(dataset_name)
             break
 
