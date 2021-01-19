@@ -94,8 +94,8 @@ if __name__ == '__main__':
         direction = drive_view[570:580, 15:25]
 
         cv2.imshow("Drive_view", drive_view)
-        cv2.imshow("Mapview", mapview)
-        cv2.imshow("Direction", direction)
+        # cv2.imshow("Mapview", mapview)
+        # cv2.imshow("Direction", direction)
 
         data_log = dc.save_data(drive_view, mapview, direction, key_input, index)
         # print(key_input)
