@@ -54,7 +54,7 @@ class DataCollect:
         # save captured images in 'Autopilot/dataset/imgs/(file names)''
         target_filename = self.target_folder + 'imgs/' + "drive_view" + str(index) + '.jpg'  # numpy array
         # # + datetime.datetime.utcnow().strftime("%y%m%d_%H-%M-%S")
-        resize(drive_view_img)
+        drive_view_img = resize(drive_view_img)
         cv2.imwrite(target_filename, drive_view_img)
         # cv2.imwrite(mapview_filename, mapview_img)
         # cv2.imwrite(direction_filename, direction_img)
