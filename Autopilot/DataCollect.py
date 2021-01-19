@@ -54,23 +54,18 @@ class DataCollect:
                     return
         return
 
-    def save_data(self, drive_view_img, mapview_img, direction_img, control):
+    def save_data(self, drive_view_img, mapview_img, direction_img, control, index):
         # if control == 'w' or control == 'd': continue
         # save captured images in 'Autopilot/dataset/imgs/(file names)''
         target_directory = self.target_folder + 'imgs/'
         drive_view_filename = target_directory + 'drive_view/' + datetime.datetime.utcnow().strftime(
-            "%y%m%d_%H-%M-%S") + "_" + "drive_view" + '.jpg'  # numpy array
-        mapview_filename = target_directory + 'mapview/' + datetime.datetime.utcnow().strftime(
-            "%y%m%d_%H-%M-%S") + "_" + "mapview" + '.jpg'  # numpy array
-        direction_filename = target_directory + 'direction/' + datetime.datetime.utcnow().strftime(
-            "%y%m%d_%H-%M-%S") + "_" + "direction" + '.jpg'  # numpy array
+            "%y%m%d_%H-%M-%S") + "_" + "drive_view" + str(index) + '.jpg'  # numpy array
 
         cv2.imwrite(drive_view_filename, drive_view_img)
         # cv2.imwrite(mapview_filename, mapview_img)
         # cv2.imwrite(direction_filename, direction_img)
 
-        temp_dict = {'drive_view': drive_view_filename, 'mapview': mapview_filename,
-                     'direction': direction_filename, 'control': control}
+        temp_dict = {'drive_view': drive_view_filename, 'control': control}
         return temp_dict
 
 
@@ -110,7 +105,7 @@ if __name__ == '__main__':
         cv2.imshow("Mapview", mapview)
         cv2.imshow("Direction", direction)
 
-        data_log = dc.save_data(drive_view, mapview, direction, key_input)
+        data_log = dc.save_data(drive_view, mapview, direction, key_input, index)
         # print(key_input)
         print(data_log)
 
