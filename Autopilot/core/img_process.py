@@ -1,3 +1,6 @@
+import os
+import sys
+
 import win32gui
 import win32ui
 
@@ -9,22 +12,11 @@ import win32con
 class Image_Processor:
 
     def __init__(self):
-        """
-        Constructor.
+        self.desktop = win32gui.GetDesktopWindow()
+        self.gtawin = win32gui.FindWindow(None, "Grand Theft Auto V")
 
-        Create two KNN models performing inference on speedometer, direction indicator
-        """
-        def initKNN(self, data, labels, shape):
-            knn = cv2.ml.KNearest_create()
-            train_data = np.load(data).reshape(-1, shape).astype(np.float32)
-            train_labels = np.load(labels)
-            knn.train(train_data, cv2.ml.ROW_SAMPLE, train_labels)
-            return knn
 
-        # self.knnDigits = initKNN("", "", 40)
-        # self.knnArrows = initKNN("", "", 90)
-
-    def grab_screen(self, winName: str = "Grand Theft Auto V"):
+    def grab_screen(self):
         """
         grab_screen
 
@@ -32,10 +24,10 @@ class Image_Processor:
         :param winName: Name of the game window to be captured
         :return: Numpy array
         """
-        desktop = win32gui.GetDesktopWindow()
+        desktop = self.desktop
 
         # get area by a window name
-        gtawin = win32gui.FindWindow(None, winName)
+        gtawin = self.gtawin
         # get the bounding box of the window
         x_left, y_up, x_right, y_down = win32gui.GetWindowRect(gtawin)
         # cut window boarders
