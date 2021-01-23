@@ -2,6 +2,7 @@ import os
 import cv2
 import datetime
 import win32api as wapi
+import numpy as np
 import pandas as pd
 import os
 from utils import resize
@@ -61,19 +62,43 @@ class DataCollect:
         temp_dict = {'drive_view': target_filename, 'control': control}
         return temp_dict
 
+    def save_as_numpy(self, img_list, label_list):
+        """
+        Save the list of images, keys as .npy file in designated path
+        :param img_list: List of flattened images
+        :param label_list: List of user inputs
+        :param path: Path in which the files are saved to
+        :return: Nothing
+        """
+        img_path = self.target_folder + "img.npy"
+        label_path = self.target_folder + "label.npy"
+        np.save(img_path, np.array(img_list))
+        np.save(label_path, np.array(label_list))
+
 
 if __name__ == '__main__':
     index = 0
+    max_sample_num = 10000  # maximum number of samples in a single data
     start_flag = False
+    img_list = []   # a list to store flattened images
+    label_list = [] # a list to store corresponding input from player
     data_dict = {}
+
     dc = DataCollect()
     ImgProc = Image_Processor()
+
     while True:
-        if cv2.waitKey(25) & 0xFF == ord("q"):
+        """
+        Stop collecting data and terminate if,
+        (1) User pressed 'q"
+        (2) Number of collected sample exceeds 10,000
+        """
+        if (cv2.waitKey(25) & 0xFF == ord("q")) or (index > max_sample_num - 1):
             cv2.destroyAllWindows()
             dataset = pd.DataFrame.from_dict(data_dict, orient='index')
             dataset_name = dc.target_folder + "dataset.csv"
             dataset.to_csv(dataset_name)
+            dc.save_as_numpy(img_list, label_list)
             break
 
         key_input = dc.capture_key()
@@ -90,6 +115,8 @@ if __name__ == '__main__':
             continue
 
         drive_view = ImgProc.grab_screen()
+        img_list.append(drive_view.reshape(1, -1))   # append flattened image to the list
+        label_list.append(key_input)    # append user input to the list
         mapview = drive_view[480:590, 5:160]
         direction = drive_view[570:580, 15:25]
 
