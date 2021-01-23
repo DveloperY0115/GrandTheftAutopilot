@@ -4,6 +4,7 @@ from tensorflow.keras import models
 from tensorflow.keras.layers import Conv2D, Flatten, Dense, Dropout
 from tensorflow.keras.layers.experimental.preprocessing import Rescaling
 
+
 class pilotNet:
 
     def __init__(self, drop_out_rate):
