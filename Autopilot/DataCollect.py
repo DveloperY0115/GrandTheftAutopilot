@@ -103,6 +103,9 @@ if __name__ == '__main__':
             dc.save_as_numpy(img_list, label_list)
             break
 
+        # TODO: Implement a routine which saves data periodically (might require multithreadiing for efficiency)
+        # TODO: Also, if data is thought to be too large, consider using 'HDF5' format instead of '.npy' format
+
         key_input = dc.capture_key()
         # If press S, data starts to be collected
         # If press E, data collecting stops
