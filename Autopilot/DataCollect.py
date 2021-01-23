@@ -50,6 +50,7 @@ class DataCollect:
                     return
         return
 
+    """
     def save_data(self, drive_view_img, mapview_img, direction_img, control, index):
         # if control == 'w' or control == 'd': continue
         # save captured images in 'Autopilot/dataset/imgs/(file names)''
@@ -61,6 +62,7 @@ class DataCollect:
         # cv2.imwrite(direction_filename, direction_img)
         temp_dict = {'drive_view': target_filename, 'control': control}
         return temp_dict
+    """
 
     def save_as_numpy(self, img_list, label_list):
         """
@@ -80,8 +82,8 @@ if __name__ == '__main__':
     index = 0
     max_sample_num = 10000  # maximum number of samples in a single data
     start_flag = False
-    img_list = []   # a list to store flattened images
-    label_list = [] # a list to store corresponding input from player
+    img_list = []    # a list to store flattened images
+    label_list = []  # a list to store corresponding input from player
     data_dict = {}
 
     dc = DataCollect()
@@ -95,9 +97,9 @@ if __name__ == '__main__':
         """
         if (cv2.waitKey(25) & 0xFF == ord("q")) or (index > max_sample_num - 1):
             cv2.destroyAllWindows()
-            dataset = pd.DataFrame.from_dict(data_dict, orient='index')
-            dataset_name = dc.target_folder + "dataset.csv"
-            dataset.to_csv(dataset_name)
+            # dataset = pd.DataFrame.from_dict(data_dict, orient='index')
+            # dataset_name = dc.target_folder + "dataset.csv"
+            # dataset.to_csv(dataset_name)
             dc.save_as_numpy(img_list, label_list)
             break
 
@@ -117,16 +119,16 @@ if __name__ == '__main__':
         drive_view = ImgProc.grab_screen()
         img_list.append(drive_view.reshape(1, -1))   # append flattened image to the list
         label_list.append(key_input)    # append user input to the list
-        mapview = drive_view[480:590, 5:160]
-        direction = drive_view[570:580, 15:25]
+        # mapview = drive_view[480:590, 5:160]
+        # direction = drive_view[570:580, 15:25]
 
         cv2.imshow("Drive_view", drive_view)
         # cv2.imshow("Mapview", mapview)
         # cv2.imshow("Direction", direction)
 
-        data_log = dc.save_data(drive_view, mapview, direction, key_input, index)
+        # data_log = dc.save_data(drive_view, mapview, direction, key_input, index)
         # print(key_input)
-        print(data_log)
+        # print(data_log)
 
         index += 1
-        data_dict[index] = data_log
+        # data_dict[index] = data_log
