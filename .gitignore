@@ -9,6 +9,7 @@
 # Do not track dataset files
 *.jpg
 *.csv
+*.npy
 
 ### JetBrains ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio, WebStorm and Rider
