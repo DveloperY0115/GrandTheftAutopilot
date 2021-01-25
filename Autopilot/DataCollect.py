@@ -24,8 +24,6 @@ class DataCollect:
         try:
             if not os.path.exists(self.target_folder):
                 os.makedirs(self.target_folder)
-            if not os.path.exists(self.target_folder + "imgs"):
-                os.makedirs(self.target_folder + "imgs")
 
         except OSError:
             print('Error: Creating directory.')
@@ -103,7 +101,7 @@ if __name__ == '__main__':
             dc.save_as_numpy(img_list, label_list)
             break
 
-        # TODO: Implement a routine which saves data periodically (might require multithreadiing for efficiency)
+        # TODO: Implement a routine which saves data periodically (might require multi-threading for efficiency)
         # TODO: Also, if data is thought to be too large, consider using 'HDF5' format instead of '.npy' format
 
         key_input = dc.capture_key()
