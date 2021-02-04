@@ -43,4 +43,19 @@ class DataLoader:
             img = np.load(file, allow_pickle=True)
         for file in glob.glob(full_path + "/" + "label.npy"):
             label = np.load(file, allow_pickle=True)
-            return ( img, label )
+            return (img, label)
+
+
+    def load_csv(self, data_dir_name):
+        self.full_path = self.path_to_datasets + "/" + data_dir_name
+        for file in glob.glob(self.full_path + "/" + "*.csv"):
+            # There should be only one CSV file in the given directory
+            df = pd.read_csv(file)
+            self.df = df
+            return df
+
+    def load_img(self, sample_num):
+        # TODO: We probably have to change the way path to image file is saved
+        img_path = self.path_to_datasets + "/../" + str(self.df["drive_view"].iloc[sample_num])
+        img = cv2.imread(img_path)
+        return img
