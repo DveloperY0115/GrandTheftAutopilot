@@ -6,7 +6,8 @@
 *.cfg
 *.pth
 
-# Do not track dataset files
+# Do not track training data
+*.npy
 *.jpg
 *.csv
 
