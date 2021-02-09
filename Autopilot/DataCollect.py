@@ -1,111 +1,105 @@
 import os
 import cv2
-import numpy as np
 import datetime
-# import Autopilot.Perception.ImageGrab as ImageGrab
-from PIL import ImageGrab, Image
 import win32api as wapi
 import pandas as pd
+import os
+from utils import resize
 
-# 1280 * 720
-mapview_bbox = (5, 520, 160, 630)
-direction_bbox = (15, 610, 25, 620)
+from core.img_process import Image_Processor
+
+# 800 * 600
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-img_w, img_h = 800, 600
 
-keyList = ["\b"]
-for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789,.'£$/\\":
-    keyList.append(char)
+class DataCollect:
+    def __init__(self):
+        self.keyList = ["\b"]
+        for char in "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789,.'£$/\\":
+            self.keyList.append(char)
+        self.target_folder = './dataset/' + datetime.datetime.utcnow().strftime(
+            "%y%m%d_%H-%M-%S") + "_" + "data/"
+        # Set all the folders
+        try:
+            if not os.path.exists(self.target_folder):
+                os.makedirs(self.target_folder)
+            if not os.path.exists(self.target_folder + "imgs"):
+                os.makedirs(self.target_folder + "imgs")
 
+        except OSError:
+            print('Error: Creating directory.')
 
-def capture_key():
-    for key in keyList:
-        if wapi.GetAsyncKeyState(ord(key)):
-            if key == 'A':
-                return 'A'
-            elif key == 'D':
-                return 'D'
-            else:
-                return
-    return
+    # Capture Key
+    # A, D: Represents steering angle in GTA
+    # S, E: Represents Start and End.
+    def capture_key(self):
+        for button in self.keyList:
+            if wapi.GetAsyncKeyState(ord(button)):
+                if button == 'A':
+                    return 'A'
+                elif button == 'D':
+                    return 'D'
+                elif button == 'W':
+                    return 'W'
+                elif button == 'S':
+                    return 'S'
+                elif button == 'E':
+                    return 'E'
+                else:
+                    return
+        return
 
-
-def capture_frontview():
-    img = np.array(ImageGrab.grab(bbox=(0, 40, 800, 640)))
-    # Preprocess needed
-    return img
-
-
-def capture_mapview():
-    img = np.array(ImageGrab.grab(bbox=mapview_bbox))
-    return img
-
-
-def capture_direction():
-    img = np.array(ImageGrab.grab(bbox=direction_bbox))
-    return img
-
-
-# save format: date_key (key is one of w,a,s,d)
-# for example, 2020-11-17-20:50:34_w
-def save_data(frontview_img, mapview_img, direction_img, control):
-    # if control == 'w' or control == 'd': continue
-    # save captured images in 'Autopilot/dataset/imgs/(file names)''
-    target_directory = './dataset/imgs/'
-    frontview_filename = datetime.datetime.utcnow().strftime(
-        "%y-%m-%d_%H_%M_%S") + "_" + "frontview" + '.jpg'  # numpy array
-    mapview_filename = datetime.datetime.utcnow().strftime(
-        "%y-%m-%d_%H_%M_%S") + "_" + "mapview" + '.jpg'  # numpy array
-    direction_filename = datetime.datetime.utcnow().strftime(
-        "%y-%m-%d_%H_%M_%S") + "_" + "direction" + '.jpg'  # numpy array
-    # frontview_img = Image.fromarray(frontview_img)
-    # frontview_img.save(target_directory + frontview_filename)
-    print('directory: ', target_directory + frontview_filename)
-    cv2.imwrite(target_directory + frontview_filename, frontview_img)
-    cv2.imwrite(target_directory + mapview_filename, mapview_img)
-    cv2.imwrite(target_directory + direction_filename, direction_img)
-
-    temp_dict = {'frontview': frontview_filename, 'mapview': mapview_filename,
-                 'direction': direction_filename, 'control': control, 'speed': 0}
-    return temp_dict
+    def save_data(self, drive_view_img, mapview_img, direction_img, control, index):
+        # if control == 'w' or control == 'd': continue
+        # save captured images in 'Autopilot/dataset/imgs/(file names)''
+        target_filename = self.target_folder + 'imgs/' + "drive_view" + str(index) + '.jpg'  # numpy array
+        # # + datetime.datetime.utcnow().strftime("%y%m%d_%H-%M-%S")
+        drive_view_img = resize(drive_view_img)
+        cv2.imwrite(target_filename, drive_view_img)
+        # cv2.imwrite(mapview_filename, mapview_img)
+        # cv2.imwrite(direction_filename, direction_img)
+        temp_dict = {'drive_view': target_filename, 'control': control}
+        return temp_dict
 
 
-def main():
+if __name__ == '__main__':
     index = 0
+    start_flag = False
     data_dict = {}
+    dc = DataCollect()
+    ImgProc = Image_Processor()
     while True:
-        frontview = capture_frontview()
-        mapview = capture_mapview()
-        direction = capture_direction()
-        keyinput = capture_key()
-        frontview = cv2.cvtColor(frontview, cv2.COLOR_BGR2RGB)
-        mapview = cv2.cvtColor(mapview, cv2.COLOR_BGR2RGB)
-        direction = cv2.cvtColor(direction, cv2.COLOR_BGR2RGB)
-        cv2.imshow("Frontview", frontview)
-        cv2.imshow("mapview", mapview)
-        cv2.imshow("Direction", direction)
-        print(keyinput)
-        data_log = save_data(frontview, mapview, direction, keyinput)
-        print(data_log)
-        index += 1
-        data_dict[index] = data_log
-
-        key = cv2.waitKey(1) & 0xFF
-        # save_data(img, chr(key)) # lower case alphabet
-        if key == ord("q"):
+        if cv2.waitKey(25) & 0xFF == ord("q"):
             cv2.destroyAllWindows()
             dataset = pd.DataFrame.from_dict(data_dict, orient='index')
-            dataset_name = datetime.datetime.utcnow().strftime("%y-%m-%d_%H_%M_%S")+"_dataset.csv"
+            dataset_name = dc.target_folder + "dataset.csv"
             dataset.to_csv(dataset_name)
             break
-        # img = np.array(ImageGrab.grab(bbox=(0,40,800,640)))
-        # cv2.imshow("Frame", original_img)
-        # key = cv2.waitKey(1) & 0xFF
-        # save_data(img, chr(key)) # lower case alphabet
-        # if key == ord("q"):
-        #     cv2.destroyAllWindows()
-        #     break
 
+        key_input = dc.capture_key()
+        # If press S, data starts to be collected
+        # If press E, data collecting stops
+        # After pressing E, Select cv2 screen and press Q.
+        # Program will save whole csv file and terminate.
+        if key_input == 'S':
+            start_flag = True
+        elif key_input == 'E':
+            start_flag = False
 
-main()
+        if not start_flag:
+            continue
+
+        drive_view = ImgProc.grab_screen()
+        mapview = drive_view[480:590, 5:160]
+        direction = drive_view[570:580, 15:25]
+
+        cv2.imshow("Drive_view", drive_view)
+        # cv2.imshow("Mapview", mapview)
+        # cv2.imshow("Direction", direction)
+
+        data_log = dc.save_data(drive_view, mapview, direction, key_input, index)
+        # print(key_input)
+        print(data_log)
+
+        index += 1
+        data_dict[index] = data_log
