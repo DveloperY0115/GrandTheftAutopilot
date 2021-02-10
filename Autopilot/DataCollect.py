@@ -68,6 +68,7 @@ if __name__ == '__main__':
     data_dict = {}
     dc = DataCollect()
     ImgProc = Image_Processor()
+    count = 0 # variable for sampling images
     while True:
         if cv2.waitKey(25) & 0xFF == ord("q"):
             cv2.destroyAllWindows()
@@ -97,9 +98,11 @@ if __name__ == '__main__':
         # cv2.imshow("Mapview", mapview)
         # cv2.imshow("Direction", direction)
 
-        data_log = dc.save_data(drive_view, mapview, direction, key_input, index)
-        # print(key_input)
-        print(data_log)
+        if count == 10:
+            count = 0
+            index += 1
+            data_log = dc.save_data(drive_view, mapview, direction, key_input, index)
+            print(data_log)
+            data_dict[index] = data_log
 
-        index += 1
-        data_dict[index] = data_log
+        count += 1
