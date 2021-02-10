@@ -32,6 +32,7 @@ class DataCollect:
     # Capture Key
     # A, D: Represents steering angle in GTA
     # S, E: Represents Start and End.
+    # W, S: Represents accelerate and brake in GTA (Do we need them?)
     def capture_key(self):
         for button in self.keyList:
             if wapi.GetAsyncKeyState(ord(button)):
@@ -88,7 +89,7 @@ if __name__ == '__main__':
             continue
 
         drive_view = ImgProc.grab_screen()
-        drive_view_gray = cv2.cvtColor(drive_view, cv2.COLOR_BGR2GRAY)
+        drive_view_gray = cv2.cvtColor(drive_view, cv2.COLOR_RGB2GRAY)
 
         cv2.imshow("Drive_view", drive_view_gray)
 
