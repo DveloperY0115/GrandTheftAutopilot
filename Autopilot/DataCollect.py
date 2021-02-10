@@ -49,15 +49,12 @@ class DataCollect:
                     return
         return
 
-    def save_data(self, drive_view_img, mapview_img, direction_img, control, index):
+    def save_data(self, drive_view_img, control, index):
         # if control == 'w' or control == 'd': continue
         # save captured images in 'Autopilot/dataset/imgs/(file names)''
         target_filename = self.target_folder + 'imgs/' + "drive_view" + str(index) + '.jpg'  # numpy array
-        # # + datetime.datetime.utcnow().strftime("%y%m%d_%H-%M-%S")
         drive_view_img = resize(drive_view_img)
         cv2.imwrite(target_filename, drive_view_img)
-        # cv2.imwrite(mapview_filename, mapview_img)
-        # cv2.imwrite(direction_filename, direction_img)
         temp_dict = {'drive_view': target_filename, 'control': control}
         return temp_dict
 
@@ -91,17 +88,14 @@ if __name__ == '__main__':
             continue
 
         drive_view = ImgProc.grab_screen()
-        mapview = drive_view[480:590, 5:160]
-        direction = drive_view[570:580, 15:25]
+        drive_view_gray = cv2.cvtColor(drive_view, cv2.COLOR_BGR2GRAY)
 
-        cv2.imshow("Drive_view", drive_view)
-        # cv2.imshow("Mapview", mapview)
-        # cv2.imshow("Direction", direction)
+        cv2.imshow("Drive_view", drive_view_gray)
 
         if count == 10:
             count = 0
             index += 1
-            data_log = dc.save_data(drive_view, mapview, direction, key_input, index)
+            data_log = dc.save_data(drive_view_gray, key_input, index)
             print(data_log)
             data_dict[index] = data_log
 
