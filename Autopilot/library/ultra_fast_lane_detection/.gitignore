@@ -4,7 +4,7 @@
 *.pth
 
 *vscode
-
+*.jpg
 **/build
 
 evaluate 
