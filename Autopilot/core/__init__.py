@@ -1,3 +1,3 @@
-import core.detect as detect
+import core.detect_objects as detect
 import core.utils as utils
 
